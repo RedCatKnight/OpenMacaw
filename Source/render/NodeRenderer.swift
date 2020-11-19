@@ -6,7 +6,7 @@ import UIKit
 import AppKit
 #endif
 
-enum ColoringMode {
+public enum ColoringMode {
     case rgb, greyscale, alphaOnly
 }
 
@@ -20,7 +20,7 @@ class CachedLayer {
     }
 }
 
-class NodeRenderer {
+open class NodeRenderer {
 
     weak var view: DrawingView?
     var sceneLayer: CALayer? {
@@ -253,7 +253,7 @@ class NodeRenderer {
         return filter.outputImage!
     }
 
-    func renderToImage(bounds: Rect, inset: Double = 0, coloringMode: ColoringMode = .rgb) -> MImage {
+    public func renderToImage(bounds: Rect, inset: Double = 0, coloringMode: ColoringMode = .rgb) -> MImage {
         let screenScale: CGFloat = MMainScreen()?.mScale ?? 1.0
         MGraphicsBeginImageContextWithOptions(CGSize(width: bounds.w + inset, height: bounds.h + inset), false, screenScale)
         let tempContext = MGraphicsGetCurrentContext()!
@@ -268,11 +268,11 @@ class NodeRenderer {
         return img!
     }
 
-    func doRender(in context: CGContext, force: Bool, opacity: Double, coloringMode: ColoringMode = .rgb) {
+    public func doRender(in context: CGContext, force: Bool, opacity: Double, coloringMode: ColoringMode = .rgb) {
         fatalError("Unsupported")
     }
 
-    final func findNodeAt(location: CGPoint, ctx: CGContext) -> NodePath? {
+    final public func findNodeAt(location: CGPoint, ctx: CGContext) -> NodePath? {
         guard node.opaque, let inverted = node.place.invert() else {
             return .none
         }
@@ -290,7 +290,7 @@ class NodeRenderer {
         return result
     }
 
-    final func findNodeAt(parentNodePath: NodePath, ctx: CGContext) -> NodePath? {
+    final public func findNodeAt(parentNodePath: NodePath, ctx: CGContext) -> NodePath? {
         guard node.opaque, let inverted = node.place.invert() else {
             return .none
         }
@@ -312,7 +312,7 @@ class NodeRenderer {
         return nil
     }
 
-    func calculateZPositionRecursively() {
+    public func calculateZPositionRecursively() {
         calculateZPosition(self)
     }
 
@@ -342,7 +342,7 @@ class NodeRenderer {
         return apply(maskImage: maskImage, to: image)
     }
 
-    func apply(maskImage: MImage, to image: MImage) -> CGImage {
+    public func apply(maskImage: MImage, to image: MImage) -> CGImage {
         let imageReference = image.cgImage!
         let maskReference = maskImage.cgImage!
 

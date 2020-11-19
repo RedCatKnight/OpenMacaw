@@ -4,12 +4,12 @@ import Foundation
 import UIKit
 #endif
 
-class GroupRenderer: NodeRenderer {
+open class GroupRenderer: NodeRenderer {
 
     var group: Group
     var renderers: [NodeRenderer] = []
 
-    override var node: Node {
+    open override var node: Node {
         return group
     }
 
@@ -38,7 +38,7 @@ class GroupRenderer: NodeRenderer {
         }
     }
 
-    override func doRender(in context: CGContext, force: Bool, opacity: Double, coloringMode: ColoringMode = .rgb) {
+    public override func doRender(in context: CGContext, force: Bool, opacity: Double, coloringMode: ColoringMode = .rgb) {
         renderers.forEach { renderer in
             if !renderer.isAnimating() {
                 renderer.render(in: context, force: force, opacity: opacity, coloringMode: coloringMode)
@@ -46,7 +46,7 @@ class GroupRenderer: NodeRenderer {
         }
     }
 
-    override func doFindNodeAt(path: NodePath, ctx: CGContext) -> NodePath? {
+    open override func doFindNodeAt(path: NodePath, ctx: CGContext) -> NodePath? {
         for renderer in renderers.reversed() {
             if let result = renderer.findNodeAt(parentNodePath: path, ctx: ctx) {
                 return result
@@ -55,7 +55,7 @@ class GroupRenderer: NodeRenderer {
         return .none
     }
 
-    override func dispose() {
+    open override func dispose() {
         super.dispose()
         renderers.forEach { renderer in renderer.dispose() }
         renderers.removeAll()

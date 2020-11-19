@@ -204,7 +204,7 @@ open class MacawView: MView, MGestureRecognizerDelegate {
     }
 }
 
-internal class DrawingView: MView {
+open class DrawingView: MView {
 
     /// Scene root node
     open var node: Node = Group() {

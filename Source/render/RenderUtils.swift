@@ -6,9 +6,9 @@ import UIKit
 import AppKit
 #endif
 
-class RenderUtils {
+open class RenderUtils {
 
-    class func mapDash(_ dashes: [Double]) -> UnsafeMutablePointer<CGFloat> {
+    open class func mapDash(_ dashes: [Double]) -> UnsafeMutablePointer<CGFloat> {
         let p = UnsafeMutablePointer<CGFloat>.allocate(capacity: dashes.count * MemoryLayout<CGFloat>.size)
         for (index, item) in dashes.enumerated() {
             p[index] = CGFloat(item)
@@ -16,7 +16,7 @@ class RenderUtils {
         return p
     }
 
-    class func createNodeRenderer(_ node: Node, view: DrawingView?, parentRenderer: GroupRenderer? = nil) -> NodeRenderer {
+    public class func createNodeRenderer(_ node: Node, view: DrawingView?, parentRenderer: GroupRenderer? = nil) -> NodeRenderer {
         if let group = node as? Group {
             return GroupRenderer(group: group, view: view, parentRenderer: parentRenderer)
         } else if let shape = node as? Shape {
@@ -75,11 +75,11 @@ class RenderUtils {
         return nil
     }
 
-    class func applyOpacity(_ color: Color, opacity: Double) -> Color {
+    open class func applyOpacity(_ color: Color, opacity: Double) -> Color {
         return Color.rgba(r: color.r(), g: color.g(), b: color.b(), a: Double(color.a()) / 255.0 * opacity)
     }
 
-    class func toCGPath(_ locus: Locus) -> CGPath {
+    open class func toCGPath(_ locus: Locus) -> CGPath {
         if let arc = locus as? Arc {
             if arc.ellipse.rx != arc.ellipse.ry {
                 // http://stackoverflow.com/questions/11365775/how-to-draw-an-elliptical-arc-with-coregraphics
@@ -99,7 +99,7 @@ class RenderUtils {
         return toBezierPath(locus).cgPath
     }
 
-    class func toBezierPath(_ locus: Locus) -> MBezierPath {
+    open class func toBezierPath(_ locus: Locus) -> MBezierPath {
         if let round = locus as? RoundRect {
             let corners = CGSize(width: CGFloat(round.rx), height: CGFloat(round.ry))
             return MBezierPath(roundedRect: round.rect.toCG(), byRoundingCorners:
@@ -524,7 +524,7 @@ class RenderUtils {
         return bezierPath
     }
 
-    class func calcAngle(ux: Double, uy: Double, vx: Double, vy: Double) -> Double {
+    open class func calcAngle(ux: Double, uy: Double, vx: Double, vy: Double) -> Double {
         let sign = copysign(1, ux * vy - uy * vx)
         let value = (ux * vx + uy * vy) / (sqrt(ux * ux + uy * uy) * sqrt(vx * vx + vy * vy))
         if value < -1 {
@@ -536,11 +536,11 @@ class RenderUtils {
         }
     }
 
-    class func num2bool(_ double: Double) -> Bool {
+    open class func num2bool(_ double: Double) -> Bool {
         return double > 0.5 ? true : false
     }
 
-    internal class func setStrokeAttributes(_ stroke: Stroke, ctx: CGContext?) {
+    open class func setStrokeAttributes(_ stroke: Stroke, ctx: CGContext?) {
         ctx!.setLineWidth(CGFloat(stroke.width))
         ctx!.setLineJoin(stroke.join.toCG())
         ctx!.setLineCap(stroke.cap.toCG())
@@ -551,7 +551,7 @@ class RenderUtils {
         }
     }
 
-    internal class func setGeometry(_ locus: Locus, ctx: CGContext) {
+    open class func setGeometry(_ locus: Locus, ctx: CGContext) {
         if let rect = locus as? Rect {
             ctx.addRect(rect.toCG())
         } else if let round = locus as? RoundRect {
@@ -575,7 +575,7 @@ class RenderUtils {
         }
     }
 
-    internal class func setClip(_ clip: Locus?, ctx: CGContext) {
+    open class func setClip(_ clip: Locus?, ctx: CGContext) {
         if let rect = clip as? Rect {
             ctx.clip(to: CGRect(x: rect.x, y: rect.y, width: rect.w, height: rect.h))
         } else if let clip = clip {
